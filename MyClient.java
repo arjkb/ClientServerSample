@@ -1,12 +1,16 @@
 /*
+	File	: MyClient.java
+	CODER	: Arjun Krishna Babu
+	GITHUB	: https://github.com/arjunkbabu/ClientServerSample
+
 	CLIENT PROGRAM
 
-		Supposed to take the name of the required webpage, and send this webpage to the server program.
+		Takes the name of the required webpage (through the commant line), 
+		and send this webpage to the server program.
 
-		The web server processes this request, and sends the requested webpage back to the client.
+		The server program processes this request, and sends the
+		requested webpage back to the client.
 
-
-	CODER	:	Arjun Krishna Babu	
 */
 
 import java.net.*;		//for socket and networking functionalities
@@ -17,20 +21,20 @@ public class MyClient	{
 	public static void main(String args[]) throws IOException	{
 		final int PORT_ADDRESS = 3001;
 		//create a new Socket that listens to port 3000 on the same machine
+
 		String webrequest = args[0];
+		/*	stores the name of the webpage to fetch onto a string.
+			The name of the required webpage is passed as a command-line
+			argument.
+		*/
 		
 		Socket s = new Socket("localhost", PORT_ADDRESS);
 
 		System.out.println("\n Connection Estb Status: " + s.isConnected() );
 
 		try	{
-//			Socket s = new Socket("localhost", PORT_ADDRESS);
-			
 			s.setSoTimeout(30000); //value in milliseconds
-			/*
-				waits for 30 seconds for to establish connection with server
-			*/
-
+			//waits 30 seconds to  establish connection with server
 
 			PrintWriter out = new PrintWriter( s.getOutputStream() , true);
 			Scanner in = new Scanner( s.getInputStream() );
@@ -38,29 +42,19 @@ public class MyClient	{
 				Associates a PrintWriter object with the output stream,
 				and a Scanner object with the input stream of the socket.
 			*/
+
+			out.println(webrequest); //send request to server
 			
+//			System.out.println("GET BACK STREAM?: " + in.hasNextLine());
 
-
-			/*
-				Write two messages into the socket.
-
-				This message would be retrieved from the other end
-				of the socket from the server program
-			*/
-//			out.println("This is message 1");
-//			out.println("This is message 2");
-
-			out.println(webrequest);
-			
-			System.out.println("GET BACK STREAM?: " + in.hasNextLine());
-			while(in.hasNextLine())	{
+			//prints back the reply from the server:
+			while( in.hasNextLine() )	{
 				System.out.println( in.nextLine() );
 			}
 		}
 		catch(Exception E)	{
 			//Incase some exception gets thrown, print the stack-trace
 			//might be easier to debug
-
 			System.out.println("\n Oops! Something went wrong!");
 			E.printStackTrace();
 		}
